@@ -25,14 +25,33 @@
     <?php
     $db = new SQLite3("DB/AbsenzverwaltungDB.db");
 
-    $test = $db->query("SELECT * FROM TStudenten");
-    while ($dsatz = $test->fetchArray(SQLITE3_ASSOC)) {
-        echo $dsatz["StudId"] . ", "
-            . $dsatz["StudVorname"] . ", "
-            . $dsatz["StudNachname"] . ", "
-            . $dsatz["KlasName"] . "\n";
-    }
+    $StudQuery = $db->query("SELECT * FROM TStudenten");
 
+    $dataColumns = array();
+    $dataRows = array();
+
+    while($row = $StudQuery->fetchArray(SQLITE3_ASSOC))
+{
+
+
+   //add columns to array, checking if value exists
+   foreach($row as $key => $value)
+   {
+
+       if(in_array(''.$key.'', $dataColumns)){
+
+          //column already in array, dont add again.
+
+       }else{
+
+            //column not in array, add it.
+            $dataColumns[]=array(
+                'column'=>$key
+            );  
+
+        }
+    }
+}
     ?>
 
 
@@ -65,47 +84,32 @@
         </div>
         <div class="side">
             <h2>Tabelle</h2>
+            <input type="date" name="date" placeholder="select date">
             <div class="box" style="height:450px;">
-                <input type="date" name="date" placeholder="select date">
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Anwesend</th>
-                        <th>Endschuldigt</th>
-                        <th>unendschuldigt</th>
-                        <th>verspätet</th>
-                    </tr>
-                    <tr>
-                        <td>Alfred Kiste</td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-
-                    </tr>
-                    <tr>
-                        <td>Maria Anders</td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                    </tr>
-                    <tr>
-                        <td>Julian Van Türgriff</td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                    </tr>
-                    <tr>
-                        <td>Max Mustermann</td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                        <td><input type="radio"></td>
-                    </tr>
-                </table>
-
+                <?php
+                //build html table
+               $firstRow = true;
+               echo '<div class="table-responsive"><table class="table">';
+               while ($row = $StudQuery->fetchArray(SQLITE3_ASSOC)) {
+                   if ($firstRow) {
+                       echo '<thead><tr>';
+                       foreach ($row as $key => $value) {
+                           echo '<th>'.$key.'</th>';
+                       }
+                       echo '</tr></thead>';
+                       echo '<tbody>';
+                       $firstRow = false;
+                   }
+               
+                   echo '<tr>';
+                   foreach ($row as $value) {
+                       echo '<td>'.$value.'</td>';
+                   }
+                   echo '</tr>';
+               }
+               echo '</tbody>';
+               echo '</table></div>';          
+                ?>
             </div>
         </div>
     </main>
