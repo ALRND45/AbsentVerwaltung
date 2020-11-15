@@ -26,6 +26,7 @@
     $db = new SQLite3("DB/AbsenzverwaltungDB.db");
 
     $StudQuery = $db->query("SELECT * FROM TStudenten");
+    $LehrQuery = $db->query("SELECT * FROM TLehrer");
 
     $dataColumns = array();
     $dataRows = array();
@@ -52,6 +53,7 @@
         }
     }
 }
+
     ?>
 
 
@@ -71,14 +73,20 @@
 
             <label for="teacher">Choose a Teacher:</label>
             <select name="teacher" id="teacher">
-                <option value="volvo">Sven Nüesch</option>
-                <option value="saab">Jean-Pierre Mourret</option>
+            <?php
+            while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
+                echo '<option value="teacher">' . $dsatz["Vorname"] . " " . $dsatz["Nachname"] . '</option>"';
+              }
+            ?>
             </select>
             <br>
             <label for="subject">Choose a Subject:</label>
             <select name="subject" id="subject">
-                <option value="subject">IWEB</option>
-                <option value="subject">IPRO</option>
+                <?php
+            while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
+                echo '<option value="subject">' . $dsatz["FachKuerz"] . '</option>"';
+              }
+            ?>
             </select>
 
         </div>
