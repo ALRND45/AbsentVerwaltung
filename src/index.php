@@ -74,6 +74,7 @@
             <label for="teacher">Choose a Teacher:</label>
             <select name="teacher" id="teacher">
             <?php
+            //add TLehrer, TFächer to Dropdown
             while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
                 echo '<option value="teacher">' . $dsatz["Vorname"] . " " . $dsatz["Nachname"] . '</option>"';
               }
@@ -98,12 +99,19 @@
                 //build html table
                $firstRow = true;
                echo '<div class="table-responsive"><table class="table">';
+               $i = 0;
                while ($row = $StudQuery->fetchArray(SQLITE3_ASSOC)) {
+                   
                    if ($firstRow) {
                        echo '<thead><tr>';
                        foreach ($row as $key => $value) {
                            echo '<th>'.$key.'</th>';
+                           
                        }
+                       echo '<th>' . 'Anwesend' . '</th>';
+                       echo '<th>' . 'Entschuldigt' . '</th>';
+                       echo '<th>' . 'Unentschuldigt' . '</th>';
+                       echo '<th>' . 'verspaetet' . '</th>';
                        echo '</tr></thead>';
                        echo '<tbody>';
                        $firstRow = false;
@@ -112,13 +120,26 @@
                    echo '<tr>';
                    foreach ($row as $value) {
                        echo '<td>'.$value.'</td>';
+                       
+                       
                    }
+                   echo '<td>' . '<input type="radio" id="0"
+                   name="absence' . $i . '"' . ' value="anwesend">' . '</td>' ;
+                   echo '<td>' . '<input type="radio" id="1"
+                   name="absence' . $i . '"' . ' value="entschuldigt">' . '</td>' ;
+                   echo '<td>' . '<input type="radio" id="2"
+                   name="absence' . $i . '"' . ' value="unentschuldigt">' . '</td>' ;
+                   echo '<td>' . '<input type="radio" id="3"
+                   name="absence' . $i . '"' . ' value="verspaetet">' . '</td>' ;
                    echo '</tr>';
+                   
+                   $i++;
                }
                echo '</tbody>';
                echo '</table></div>';          
                 ?>
             </div>
+            <button type="button" onclick="myFunction()">Add Absence</button> 
         </div>
     </main>
 
