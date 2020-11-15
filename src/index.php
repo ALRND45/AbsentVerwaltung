@@ -31,28 +31,25 @@
     $dataColumns = array();
     $dataRows = array();
 
-    while($row = $StudQuery->fetchArray(SQLITE3_ASSOC))
-{
+    while ($row = $StudQuery->fetchArray(SQLITE3_ASSOC)) {
 
 
-   //add columns to array, checking if value exists
-   foreach($row as $key => $value)
-   {
+        //add columns to array, checking if value exists
+        foreach ($row as $key => $value) {
 
-       if(in_array(''.$key.'', $dataColumns)){
+            if (in_array('' . $key . '', $dataColumns)) {
 
-          //column already in array, dont add again.
+                //column already in array, dont add again.
 
-       }else{
+            } else {
 
-            //column not in array, add it.
-            $dataColumns[]=array(
-                'column'=>$key
-            );  
-
+                //column not in array, add it.
+                $dataColumns[] = array(
+                    'column' => $key
+                );
+            }
         }
     }
-}
 
     ?>
 
@@ -73,73 +70,69 @@
 
             <label for="teacher">Choose a Teacher:</label>
             <select name="teacher" id="teacher">
-            <?php
-            //add TLehrer, TFächer to Dropdown
-            while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
-                echo '<option value="teacher">' . $dsatz["Vorname"] . " " . $dsatz["Nachname"] . '</option>"';
-              }
-            ?>
+                <?php
+                //add TLehrer, TFächer to Dropdown
+                while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
+                    echo '<option value="teacher">' . $dsatz["Vorname"] . " " . $dsatz["Nachname"] . '</option>"';
+                }
+                ?>
             </select>
             <br>
             <label for="subject">Choose a Subject:</label>
             <select name="subject" id="subject">
                 <?php
-            while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
-                echo '<option value="subject">' . $dsatz["FachKuerz"] . '</option>"';
-              }
-            ?>
+                while ($dsatz = $LehrQuery->fetchArray(SQLITE3_ASSOC)) {
+                    echo '<option value="subject">' . $dsatz["FachKuerz"] . '</option>"';
+                }
+                ?>
             </select>
 
         </div>
         <div class="side">
             <h2>Tabelle</h2>
-            <input type="date" name="date" placeholder="select date">
+            <input type="date" name="date" id="date" value="2020-01-01" min="2020-01-01" max="2020-12-31" placeholder="select date">
             <div class="box" style="height:450px;">
                 <?php
                 //build html table
-               $firstRow = true;
-               echo '<div class="table-responsive"><table class="table">';
-               $i = 0;
-               while ($row = $StudQuery->fetchArray(SQLITE3_ASSOC)) {
-                   
-                   if ($firstRow) {
-                       echo '<thead><tr>';
-                       foreach ($row as $key => $value) {
-                           echo '<th>'.$key.'</th>';
-                           
-                       }
-                       echo '<th>' . 'Anwesend' . '</th>';
-                       echo '<th>' . 'Entschuldigt' . '</th>';
-                       echo '<th>' . 'Unentschuldigt' . '</th>';
-                       echo '<th>' . 'verspaetet' . '</th>';
-                       echo '</tr></thead>';
-                       echo '<tbody>';
-                       $firstRow = false;
-                   }
-               
-                   echo '<tr>';
-                   foreach ($row as $value) {
-                       echo '<td>'.$value.'</td>';
-                       
-                       
-                   }
-                   echo '<td>' . '<input type="radio" id="0"
-                   name="absence' . $i . '"' . ' value="anwesend">' . '</td>' ;
-                   echo '<td>' . '<input type="radio" id="1"
-                   name="absence' . $i . '"' . ' value="entschuldigt">' . '</td>' ;
-                   echo '<td>' . '<input type="radio" id="2"
-                   name="absence' . $i . '"' . ' value="unentschuldigt">' . '</td>' ;
-                   echo '<td>' . '<input type="radio" id="3"
-                   name="absence' . $i . '"' . ' value="verspaetet">' . '</td>' ;
-                   echo '</tr>';
-                   
-                   $i++;
-               }
-               echo '</tbody>';
-               echo '</table></div>';          
+                $firstRow = true;
+                echo '<div class="table-responsive"><table class="table">';
+                $i = 0;
+                while ($row = $StudQuery->fetchArray(SQLITE3_ASSOC)) {
+
+                    if ($firstRow) {
+                        echo '<thead><tr>';
+                        foreach ($row as $key => $value) {
+                            echo '<th>' . $key . '</th>';
+                        }
+                        echo '<th>' . 'Anwesend' . '</th>';
+                        echo '<th>' . 'Entschuldigt' . '</th>';
+                        echo '<th>' . 'Unentschuldigt' . '</th>';
+                        echo '<th>' . 'verspaetet' . '</th>';
+                        echo '</tr></thead>';
+                        echo '<tbody>';
+                        $firstRow = false;
+                    }
+
+                    echo '<tr>';
+                    foreach ($row as $value) {
+                        echo '<td>' . $value . '</td>';
+                    }
+                    echo '<td>' . '<input type="radio" id="0"
+                   name="absence' . $i . '"' . ' value="anwesend" onclick="' . addAbsence() . '">' . '</td>';
+                    echo '<td>' . '<input type="radio" id="1"
+                   name="absence' . $i . '"' . ' value="entschuldigt" onclick="">' . '</td>';
+                    echo '<td>' . '<input type="radio" id="2"
+                   name="absence' . $i . '"' . ' value="unentschuldigt" onclick="">' . '</td>';
+                    echo '<td>' . '<input type="radio" id="3"
+                   name="absence' . $i . '"' . ' value="verspaetet" onclick="">' . '</td>';
+                    echo '</tr>';
+
+                    $i++;
+                }
+                echo '</tbody>';
+                echo '</table></div>';
                 ?>
             </div>
-            <button type="button" onclick="myFunction()">Add Absence</button> 
         </div>
     </main>
 
